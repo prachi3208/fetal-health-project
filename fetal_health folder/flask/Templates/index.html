@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fetal Health Prediction</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f8;
+      padding: 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+
+    form {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    }
+
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      flex: 0 0 19%;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .form-group input,
+    .form-group select {
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 10px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+      color: green;
+      text-align: center;
+    }
+
+    .error {
+      color: red;
+      text-align: center;
+    }
+
+    @media (max-width: 1000px) {
+      .form-group {
+        flex: 0 0 48%;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .form-group {
+        flex: 0 0 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Fetal Health Prediction</h1>
+
+<form id="predictionForm">
+  <div class="form-row">
+    <div class="form-group">
+      <label for="model">Select Model:</label>
+      <select id="model" name="model">
+        <option value="logistic">Logistic Regression</option>
+        <option value="knn">KNN</option>
+        <option value="randomforest">Random Forest</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="baseline">Baseline Value</label>
+      <input type="number" id="baseline" step="any" required>
+    </div>
+
+    <div class="form-group">
+      <label for="accelerations">Accelerations</label>
+      <input type="number" id="accelerations" step="any" required>
+    </div>
+
+    <div class="form-group">
+      <label for="fetal_movement">Fetal Movement</label>
+      <input type="number" id="fetal_movement" step="any" required>
+    </div>
+
+    <div class="form-group">
+      <label for="uterine_contractions">Uterine Contractions</label>
+      <input type="number" id="uterine_contractions" step="any" required>
+    </div>
+
+    <div class="form-group">
+      <label for="light_decelerations">Light Decelerations</label>
+      <input type="number" id="light_decelerations" step="any" required>
+    </div>
+
+    <div class="form-group">
+      <label for="severe_decelerations">Severe Decelerations</label>
+      <input type="number" id="severe_decelerations" step="any" required>
+    </div>
+
+    <div class="form-group">
+      <label for="prolongued_decelerations">Prolongued Decelerations</label>
+      <input type="number" id="prolongued_decelerations" step="any" required>
+    </div>
+
+    <div class="form-group">
+      <label for="abnormal_short_term_variability">Abnormal STV</label>
+      <input type="number" id="abnormal_short_term_variability" step="any" required>
+    </div>
+
+    <div class="form-group">
+      <label for="mean_value_of_short_term_variability">Mean STV</label>
+      <input type="number" id="mean_value_of_short_term_variability" step="any" required>
+    </div>
+
+    <div class="form-group">
+      <label for="percentage_of_time_with_abnormal_long_term_variability">Abnormal LTV %</label>
+      <input type="number" id="percentage_of_time_with_abnormal_long_term_variability" step="any" required>
+    </div>
+
+    <div class="form-group">
+      <label for="mean_value_of_long_term_variability">Mean LTV</label>
+      <input type="number" id="mean_value_of_long_term_variability" step="any" required>
+    </div>
+
+    <div class="form-group">
+      <label for="histogram_width">Histogram Width</label>
+      <input type="number" id="histogram_width" step="any" required>
+    </div>
+
+    <div class="form-group">
+      <label for="histogram_min">Histogram Min</label>
+      <input type="number" id="histogram_min" step="any" required>
+    </div>
+
+    <div class="form-group">
+      <label for="histogram_max">Histogram Max</label>
+      <input type="number" id="histogram_max" step="any" required>
+    </div>
+
+    <div class="form-group">
+      <label for="histogram_number_of_peaks">Histogram Peaks</label>
+      <input type="number" id="histogram_number_of_peaks" step="any" required>
+    </div>
+
+    <div class="form-group">
+      <label for="histogram_number_of_zeroes">Histogram Zeroes</label>
+      <input type="number" id="histogram_number_of_zeroes" step="any" required>
+    </div>
+
+    <div class="form-group">
+      <label for="histogram_mode">Histogram Mode</label>
+      <input type="number" id="histogram_mode" step="any" required>
+    </div>
+
+    <div class="form-group">
+      <label for="histogram_mean">Histogram Mean</label>
+      <input type="number" id="histogram_mean" step="any" required>
+    </div>
+
+    <div class="form-group">
+      <label for="histogram_median">Histogram Median</label>
+      <input type="number" id="histogram_median" step="any" required>
+    </div>
+
+    <div class="form-group">
+      <label for="histogram_variance">Histogram Variance</label>
+      <input type="number" id="histogram_variance" step="any" required>
+    </div>
+
+    <div class="form-group">
+      <label for="histogram_tendency">Histogram Tendency</label>
+      <input type="number" id="histogram_tendency" step="any" required>
+    </div>
+  </div>
+
+  <button type="submit">Predict Health Status</button>
+</form>
+
+<div class="result" id="result"></div>
+<div class="error" id="error"></div>
+
+<script>
+  document.getElementById("predictionForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const formData = {
+      model: form.model.value,
+      "baseline value": parseFloat(form.baseline.value),
+      "accelerations": parseFloat(form.accelerations.value),
+      "fetal_movement": parseFloat(form.fetal_movement.value),
+      "uterine_contractions": parseFloat(form.uterine_contractions.value),
+      "light_decelerations": parseFloat(form.light_decelerations.value),
+      "severe_decelerations": parseFloat(form.severe_decelerations.value),
+      "prolongued_decelerations": parseFloat(form.prolongued_decelerations.value),
+      "abnormal_short_term_variability": parseFloat(form.abnormal_short_term_variability.value),
+      "mean_value_of_short_term_variability": parseFloat(form.mean_value_of_short_term_variability.value),
+      "percentage_of_time_with_abnormal_long_term_variability": parseFloat(form.percentage_of_time_with_abnormal_long_term_variability.value),
+      "mean_value_of_long_term_variability": parseFloat(form.mean_value_of_long_term_variability.value),
+      "histogram_width": parseFloat(form.histogram_width.value),
+      "histogram_min": parseFloat(form.histogram_min.value),
+      "histogram_max": parseFloat(form.histogram_max.value),
+      "histogram_number_of_peaks": parseFloat(form.histogram_number_of_peaks.value),
+      "histogram_number_of_zeroes": parseFloat(form.histogram_number_of_zeroes.value),
+      "histogram_mode": parseFloat(form.histogram_mode.value),
+      "histogram_mean": parseFloat(form.histogram_mean.value),
+      "histogram_median": parseFloat(form.histogram_median.value),
+      "histogram_variance": parseFloat(form.histogram_variance.value),
+      "histogram_tendency": parseFloat(form.histogram_tendency.value)
+    };
+
+    try {
+      const response = await fetch("http://127.0.0.1:5000/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        document.getElementById("result").textContent = `Predicted Health Status: ${result.health_status}`;
+        document.getElementById("error").textContent = "";
+      } else {
+        document.getElementById("result").textContent = "";
+        document.getElementById("error").textContent = result.error || "Prediction failed.";
+      }
+    } catch (err) {
+      document.getElementById("result").textContent = "";
+      document.getElementById("error").textContent = "Server not reachable.";
+    }
+  });
+</script>
+
+</body>
+</html>
